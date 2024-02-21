@@ -1,3 +1,4 @@
+#include <cassert>
 #include <cstddef>
 #include <string>
 #include <utility>
@@ -55,6 +56,7 @@ class SingleLinkedList {
         }
 
         BasicIterator& operator++() noexcept {
+            assert(node_ != nullptr);
             node_ = node_->next_node;
             return *this;
         }
@@ -66,10 +68,12 @@ class SingleLinkedList {
         }
 
         [[nodiscard]] reference operator*() const noexcept {
+            assert(node_ != nullptr);
             return node_->value;
         }
 
         [[nodiscard]] pointer operator->() const noexcept {
+            assert(node_ != nullptr);
             return &node_->value;
         }
 
@@ -240,15 +244,15 @@ bool operator<(const SingleLinkedList<Type> &lhs, const SingleLinkedList<Type> &
 
 template <typename Type>
 bool operator<=(const SingleLinkedList<Type> &lhs, const SingleLinkedList<Type> &rhs) {
-    return !std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    return !(lhs < rhs);
 }
 
 template <typename Type>
 bool operator>(const SingleLinkedList<Type> &lhs, const SingleLinkedList<Type> &rhs) {
-    return std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end());
+    return rhs < lhs;
 }
 
 template <typename Type>
 bool operator>=(const SingleLinkedList<Type> &lhs, const SingleLinkedList<Type> &rhs) {
-    return !std::lexicographical_compare(rhs.cbegin(), rhs.cend(), lhs.cbegin(), lhs.cend());
+    return !(lhs < rhs);
 }
